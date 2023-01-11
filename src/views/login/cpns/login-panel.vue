@@ -34,12 +34,12 @@ import { ref } from 'vue'
 import PanelAccount from './panel-account.vue'
 
 // 是否记住密码
-const isRemPwd = ref(false)
+const isRemPwd = ref<boolean>(false)
 
 const accountRef = ref<InstanceType<typeof PanelAccount>>()
 // 点击登录
 const handleLoginAction = () => {
-  accountRef.value?.loginAction()
+  accountRef.value?.loginAction(isRemPwd.value)
 }
 </script>
 <style scoped lang="less">

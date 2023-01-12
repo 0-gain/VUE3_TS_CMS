@@ -58,9 +58,9 @@ const loginAction = (flag: boolean) => {
       const { account, password } = ruleForm
       store.getUserLogin(account, password).then(() => {
         router.push('/main')
+        // 记住密码
+        localCache.setCache('name', account)
         if (flag) {
-          // 记住密码
-          localCache.setCache('name', account)
           localCache.setCache('password', password)
         } else {
           localCache.deleteCache('password')

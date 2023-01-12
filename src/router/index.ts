@@ -1,38 +1,35 @@
+import { localCache } from '@/utils/cache'
+import { firstRoute } from '@/utils/map-menu'
 import { createRouter, createWebHashHistory } from 'vue-router'
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
       path: '/',
-      redirect: '/login'
+      redirect: '/main'
     },
     {
       path: '/main',
+      name: 'main',
       component: () => import('@/views/main/main.vue'),
-      children: [
-        {
-          path: '/main/analysis',
-          component: () => import('@/views/main/analysis/index.vue')
-        },
-        {
-          path: '/main/system',
-          component: () => import('@/views/main/system/index.vue')
-        },
-        {
-          path: '/main/store',
-          component: () => import('@/views/main/store/index.vue')
-        },
-        {
-          path: '/main/product',
-          component: () => import('@/views/main/product/index.vue')
-        }
-      ]
+      children: []
     },
     {
       path: '/login',
+      name: 'login',
       component: () => import('@/views/login/login.vue')
     }
   ]
+})
+
+router.beforeEach((to) => {
+  // 如果没有token，则不准进入main
+  const token = localCache.getCache('token')
+  if (!token && to.path.startsWith('/main')) {
+    return '/login'
+  }
+  if (to.name === 'main') {
+    return firstRoute.path
+  }
 })
 export default router

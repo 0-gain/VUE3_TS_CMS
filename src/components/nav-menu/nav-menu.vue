@@ -5,7 +5,7 @@
       <span class="title" v-show="!isFold">VUE3_TS_CMS</span>
     </div>
     <el-menu
-      :default-active="currentId"
+      :default-active="defaultValue"
       class="el-menu-vertical-demo"
       :collapse="isFold"
     >
@@ -33,18 +33,31 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useLoginStore } from '@/store/login'
+import { useRoute, useRouter } from 'vue-router'
+import { mapPathToMenu } from '@/utils/map-menu'
 defineProps({
   isFold: Boolean
 })
-const currentId = ref<string>('2')
-const store = useLoginStore()
+// 获取菜单数据
+const loginStore = useLoginStore()
+const roleMenu = loginStore.roleMenu
 
-const roleMenu = computed(() => store.roleMenu)
-const handleRouter = (target: {}) => {
-  currentId.value = target.id + ''
+// menu默认值
+const router = useRouter()
+const route = useRoute()
+// 页面刷新还可以选中
+let currentMenu = mapPathToMenu(roleMenu, route.path)
+const defaultValue = ref<string>(currentMenu.id + '')
+const handleRouter = (target: any) => {
+  router.push(target.url)
 }
+// 根据路由来匹配
+watch(route, () => {
+  currentMenu = mapPathToMenu(roleMenu, route.path)
+  defaultValue.value = currentMenu.id + ''
+})
 </script>
 <style scoped lang="less">
 .nav-menu {

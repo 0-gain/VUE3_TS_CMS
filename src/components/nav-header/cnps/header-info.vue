@@ -9,7 +9,7 @@
       <el-dropdown>
         <span class="el-dropdown-link">
           <el-avatar :size="30" :src="defaultAvatar" />
-          <span class="name">coderwhy</span>
+          <span class="name">{{ name }}</span>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -33,10 +33,15 @@
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useLoginStore } from '@/store/login'
 import defaultAvatar from '@/assets/img/default-avatar.jpg'
 import { localCache } from '@/utils/cache'
 
+// 获取用户信息
+const loginStore = useLoginStore()
+const name = computed(() => loginStore.userInfo.name)
 const router = useRouter()
 // 退出登录
 const loginOutAction = () => {

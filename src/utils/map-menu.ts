@@ -17,17 +17,23 @@ export function allRoute() {
   return routes
 }
 
-export let firstRoute: RouteRecordRaw
+export let firstRoute: RouteRecordRaw | undefined = undefined
 // 根据菜单动态注册路由
 export function menuToRoute(menus: any) {
   const routes = allRoute()
+  let children = []
   for (const menu of menus) {
     for (const submenu of menu.children) {
       const route = routes.find((item) => item.path === submenu.url)
       if (route) {
         router.addRoute('main', route)
+        children.push(route)
       }
       if (route && !firstRoute) firstRoute = route
+    }
+    if (children.length) {
+      router.addRoute({ path: menu.url, redirect: children[0].path })
+      children = []
     }
   }
 }
@@ -40,4 +46,18 @@ export function mapPathToMenu(menus: any, path: string) {
       }
     }
   }
+}
+
+export function mapPathToBreadcrumbs(menus: any[], path: string) {
+  const breadcrumbs: any[] = []
+  // 1.两层遍历
+  for (const menu of menus) {
+    for (const submenu of menu.children) {
+      if (path === submenu.url) {
+        breadcrumbs.push({ name: menu.name, path: menu.url })
+        breadcrumbs.push({ name: submenu.name, path: submenu.url })
+      }
+    }
+  }
+  return breadcrumbs
 }

@@ -57,4 +57,8 @@ const changeAside = () => {
 .page-header {
   height: 48px;
 }
+.page-content {
+  text-align: center;
+  background-color: #f0f2f5;
+}
 </style>

@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useLoginStore } from '@/store/login'
 import { useRoute, useRouter } from 'vue-router'
 import { mapPathToMenu } from '@/utils/map-menu'
@@ -47,17 +47,14 @@ const roleMenu = loginStore.roleMenu
 // menu默认值
 const router = useRouter()
 const route = useRoute()
-// 页面刷新还可以选中
-let currentMenu = mapPathToMenu(roleMenu, route.path)
-const defaultValue = ref<string>(currentMenu.id + '')
+
+const defaultValue = computed(() => {
+  return mapPathToMenu(roleMenu, route.path).id + ''
+})
+
 const handleRouter = (target: any) => {
   router.push(target.url)
 }
-// 根据路由来匹配
-watch(route, () => {
-  currentMenu = mapPathToMenu(roleMenu, route.path)
-  defaultValue.value = currentMenu.id + ''
-})
 </script>
 <style scoped lang="less">
 .nav-menu {

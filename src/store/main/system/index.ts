@@ -3,7 +3,10 @@ import {
   reqUsersList,
   reqDepartmentList,
   reqRoleList,
-  reqCreateUser
+  reqCreateUser,
+  reqSearchOneUser,
+  reqUpdateUser,
+  reqDeleteUser
 } from '@/service/main'
 import type { IUsersList, IList } from './types'
 import type { INewUserData } from '@/views/main/system/user/types'
@@ -17,6 +20,7 @@ interface IStateData {
   usersListData: IListData
   departmentListData: IListData
   roleListData: IListData
+  currentUserInfo: any
 }
 export const useSystemStore = defineStore('system', {
   state: (): IStateData => {
@@ -32,7 +36,8 @@ export const useSystemStore = defineStore('system', {
       roleListData: {
         list: [],
         totalCount: 0
-      }
+      },
+      currentUserInfo: {}
     }
   },
   actions: {
@@ -54,6 +59,19 @@ export const useSystemStore = defineStore('system', {
     // 创建新用户
     async getCreateUser(data: INewUserData) {
       await reqCreateUser(data)
+    },
+    // 查询某个用户
+    async getSearchOneUser(id: number) {
+      const res = await reqSearchOneUser(id)
+      this.currentUserInfo = res.data
+    },
+    // 更新某个用户
+    async getUpdateUser(data: INewUserData, id: number) {
+      await reqUpdateUser(data, id)
+    },
+    // 删除某个用户
+    async getDeleteUser(id: number) {
+      await reqDeleteUser(id)
     }
   },
   getters: {}

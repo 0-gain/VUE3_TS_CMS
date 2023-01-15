@@ -5,3 +5,6 @@ a {
 img {
   vertical-align: top;
 }
+ul li {
+  list-style: none;
+}

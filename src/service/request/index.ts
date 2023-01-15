@@ -78,6 +78,12 @@ class Request {
   post<T = any>(config: RequestConfig<T>) {
     return this.instance.request<T>({ ...config, method: 'POST' })
   }
+  patch<T = any>(config: RequestConfig<T>) {
+    return this.instance.request<T>({ ...config, method: 'PATCH' })
+  }
+  delete<T = any>(config: RequestConfig<T>) {
+    return this.instance.request<T>({ ...config, method: 'DELETE' })
+  }
 }
 
 export default Request

@@ -27,5 +27,30 @@ export const reqDepartmentList = (data: IList) =>
 export const reqRoleList = (data: IList) =>
   request.post({ url: '/role/list', data })
 
+/**
+ * 新建用户
+ * @param data
+ * @returns
+ */
 export const reqCreateUser = (data: INewUserData) =>
   request.post({ url: '/users', data })
+
+/**
+ *查询某个用户
+ * @param id
+ * @returns
+ */
+export const reqSearchOneUser = (id: number) =>
+  request.get({ url: `/users/${id}` })
+
+/**
+ *修改用户
+ * @param data
+ * @param id
+ * @returns
+ */
+export const reqUpdateUser = (data: INewUserData, id: number) =>
+  request.patch({ url: `/users/${id}`, data })
+
+export const reqDeleteUser = (id: number) =>
+  request.delete({ url: `/users/${id}` })

@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import {
   reqUsersList,
-  reqDepartmentList,
-  reqRoleList,
   reqCreateUser,
-  reqSearchOneUser,
   reqUpdateUser,
-  reqDeleteUser
+  reqDeleteUser,
+  reqPageList,
+  reqPageCreateData,
+  reqPageDeleteData,
+  reqPageUpdateData
 } from '@/service/main'
 import type { IUsersList, IList } from './types'
 import type { INewUserData } from '@/views/main/system/user/types'
@@ -18,9 +19,7 @@ interface IListData {
 
 interface IStateData {
   usersListData: IListData
-  departmentListData: IListData
-  roleListData: IListData
-  currentUserInfo: any
+  pageListData: IListData
 }
 export const useSystemStore = defineStore('system', {
   state: (): IStateData => {
@@ -29,15 +28,10 @@ export const useSystemStore = defineStore('system', {
         list: [],
         totalCount: 0
       },
-      departmentListData: {
+      pageListData: {
         list: [],
         totalCount: 0
-      },
-      roleListData: {
-        list: [],
-        totalCount: 0
-      },
-      currentUserInfo: {}
+      }
     }
   },
   actions: {
@@ -46,24 +40,9 @@ export const useSystemStore = defineStore('system', {
       const res = await reqUsersList(data)
       this.usersListData = res.data
     },
-    // 获取部门列表
-    async getDepartmentList(data: IList) {
-      const res = await reqDepartmentList(data)
-      this.departmentListData = res.data
-    },
-    // 获取角色列表
-    async getRoleList(data: IList) {
-      const res = await reqRoleList(data)
-      this.roleListData = res.data
-    },
     // 创建新用户
     async getCreateUser(data: INewUserData) {
       await reqCreateUser(data)
-    },
-    // 查询某个用户
-    async getSearchOneUser(id: number) {
-      const res = await reqSearchOneUser(id)
-      this.currentUserInfo = res.data
     },
     // 更新某个用户
     async getUpdateUser(data: INewUserData, id: number) {
@@ -72,6 +51,27 @@ export const useSystemStore = defineStore('system', {
     // 删除某个用户
     async getDeleteUser(id: number) {
       await reqDeleteUser(id)
+    },
+
+    // 获取页面数据列表
+    async getPageListData(pageName: string, data: IList) {
+      const res = await reqPageList(pageName, data)
+      this.pageListData = res.data
+    },
+    // 创建页面数据
+    async getPageCreateData(pageName: string, data: any) {
+      const res = await reqPageCreateData(pageName, data)
+      console.log(res)
+    },
+    // 删除页面数据
+    async getPageDeleteData(pageName: string, id: number) {
+      const res = await reqPageDeleteData(pageName, id)
+      console.log(res)
+    },
+    // 编辑页面数据
+    async getPageUpdateData(pageName: string, data: any, id: number) {
+      const res = await reqPageUpdateData(pageName, data, id)
+      console.log(res)
     }
   },
   getters: {}

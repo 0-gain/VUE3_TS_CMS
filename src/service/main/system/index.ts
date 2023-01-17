@@ -54,3 +54,21 @@ export const reqUpdateUser = (data: INewUserData, id: number) =>
 
 export const reqDeleteUser = (id: number) =>
   request.delete({ url: `/users/${id}` })
+
+// 获取列表数据
+export const reqPageList = (pageName: string, data: IList) =>
+  request.post({ url: `/${pageName}/list`, data })
+
+export const reqPageCreateData = (pageName: string, data: any) =>
+  request.post({ url: `/${pageName}`, data })
+/**
+ * 删除数据
+ * @param pageName
+ * @param id
+ * @returns
+ */
+export const reqPageDeleteData = (pageName: string, id: number) =>
+  request.delete({ url: `/${pageName}/${id}` })
+
+export const reqPageUpdateData = (pageName: string, data: any, id: number) =>
+  request.patch({ url: `/${pageName}/${id}`, data })

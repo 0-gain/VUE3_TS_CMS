@@ -70,10 +70,11 @@ const rowId = ref(0)
 const show = (data?: any, flag: boolean = false) => {
   if (flag) {
     // 代表编辑状态
-    for (const key in data) {
-      createData[key] = data[key]
+    for (const item of props.config.formItems) {
+      createData[item.prop] = data[item.prop]
     }
     rowId.value = data.id
+    delete createData.password
   } else {
     for (const key in createData) {
       createData[key] = ''

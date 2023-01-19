@@ -61,3 +61,19 @@ export function mapPathToBreadcrumbs(menus: any[], path: string) {
   }
   return breadcrumbs
 }
+
+export function mapMenuToIds(menus: any[]) {
+  const ids: number[] = []
+  function _recurseGetId(menusList: any[]) {
+    for (const menu of menusList) {
+      if (menu.children) {
+        _recurseGetId(menu.children)
+      } else {
+        ids.push(menu.id)
+      }
+    }
+  }
+  _recurseGetId(menus)
+
+  return ids
+}

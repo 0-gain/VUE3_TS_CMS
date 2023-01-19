@@ -27,6 +27,7 @@ export const reqDepartmentList = (data: IList) =>
 export const reqRoleList = (data: IList) =>
   request.post({ url: '/role/list', data })
 
+export const reqMenuList = () => request.post({ url: '/menu/list' })
 /**
  * 新建用户
  * @param data

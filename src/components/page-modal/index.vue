@@ -16,6 +16,7 @@
             v-model="createData[item.prop]"
             class="m-2"
             :placeholder="item.placeHolder"
+            style="width: 100%"
           >
             <el-option
               v-for="option in item.options"
@@ -38,6 +39,9 @@
             :placeholder="item.label"
             show-password
           />
+          <template v-if="item.type === 'custom'">
+            <slot :name="item.slotName"></slot>
+          </template>
         </el-form-item>
       </template>
     </el-form>
@@ -59,6 +63,7 @@ interface IModel {
     title: string
     formItems: any[]
   }
+  otherInfo?: any
 }
 const props = defineProps<IModel>()
 const emit = defineEmits(['on-confirm'])
@@ -89,14 +94,18 @@ const hidden = () => {
 }
 
 const handleConfirm = () => {
+  let data = { ...createData }
+  if (props.otherInfo) {
+    data = { ...createData, ...props.otherInfo }
+  }
   if (isEditor.value) {
     systemStore
-      .getPageUpdateData(props.config.name, createData, rowId.value)
+      .getPageUpdateData(props.config.name, data, rowId.value)
       .then(() => {
         emit('on-confirm')
       })
   } else {
-    systemStore.getPageCreateData(props.config.name, createData).then(() => {
+    systemStore.getPageCreateData(props.config.name, data).then(() => {
       emit('on-confirm')
     })
   }

@@ -11,3 +11,21 @@ export const formatUTCToLocalTime = (dateTime: string) => {
     .replace(/(T|Z)/gi, ' ')
     .split('.')[0]
 }
+
+export const formatCount = (count: number) => {
+  // 判断长度是否大于1000
+  if (count < 1000) return count
+  // 转化为数组
+  const arr = Array.from(count.toString())
+  const ans = []
+  let counts = 0
+  for (let i = arr.length - 1; i >= 0; i--) {
+    counts++
+    if (counts > 3 && i) {
+      ans.unshift(',')
+      counts = 1
+    }
+    ans.unshift(arr[i])
+  }
+  return ans.join('')
+}

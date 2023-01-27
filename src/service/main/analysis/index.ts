@@ -29,3 +29,10 @@ export const reqGoodsCategorySale = () =>
 
 export const reqGoodsCategoryFavor = () =>
   request.get({ url: '/goods/category/favor' })
+
+/**
+ * 不同城市的销售数量
+ * @returns
+ */
+export const reqCityGoodsSale = () =>
+  request.get({ url: '/goods/address/sale' })

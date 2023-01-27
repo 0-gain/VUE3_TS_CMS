@@ -4,7 +4,8 @@ import {
   reqGoodsCategoryCount,
   reqGoodsSaleRank,
   reqGoodsCategorySale,
-  reqGoodsCategoryFavor
+  reqGoodsCategoryFavor,
+  reqCityGoodsSale
 } from '@/service/main'
 
 interface IState {
@@ -13,6 +14,7 @@ interface IState {
   saleRankData: any[]
   categorySaleData: any[]
   categoryFavorData: any[]
+  cityGoodsSale: any[]
 }
 export const useAnalysisStore = defineStore('analysis', {
   state: (): IState => {
@@ -21,7 +23,8 @@ export const useAnalysisStore = defineStore('analysis', {
       categoryData: [],
       saleRankData: [],
       categorySaleData: [],
-      categoryFavorData: []
+      categoryFavorData: [],
+      cityGoodsSale: []
     }
   },
   actions: {
@@ -44,6 +47,10 @@ export const useAnalysisStore = defineStore('analysis', {
     async getGoodsCategoryFavor() {
       const res = await reqGoodsCategoryFavor()
       this.categoryFavorData = res.data
+    },
+    async getCityGoodsSale() {
+      const res = await reqCityGoodsSale()
+      this.cityGoodsSale = res.data
     }
   },
   getters: {}

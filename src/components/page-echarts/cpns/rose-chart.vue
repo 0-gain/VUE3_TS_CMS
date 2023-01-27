@@ -6,11 +6,11 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import baseChart from '../base-chart/base-chart.vue'
+import baseChart from './base-chart.vue'
 import type { EChartsOption } from 'echarts'
-import type { IRoseEchartsData } from './types'
+import type { IEchartsData } from '../types'
 interface IProps {
-  roseData: IRoseEchartsData[]
+  roseData: IEchartsData[]
 }
 const props = defineProps<IProps>()
 const options = computed<EChartsOption>(() => {

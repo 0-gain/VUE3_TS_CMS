@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import type { EChartsOption } from 'echarts'
-import baseChart from '../base-chart/base-chart.vue'
+import baseChart from './base-chart.vue'
 interface IProps {
   labels: string[]
   values: any[]

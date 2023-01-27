@@ -3,7 +3,7 @@
     <el-container class="content-table">
       <el-header>
         <div class="title">{{ config.header.title }}</div>
-        <div class="handler">
+        <div class="handler" v-if="isCanCreate">
           <el-button type="primary" @click="handleCreateData">{{
             config.header.btnText
           }}</el-button>
@@ -37,6 +37,7 @@
             >
               <template #default="scope">
                 <el-button
+                  v-if="isCanUpdate"
                   :icon="EditPen"
                   type="primary"
                   link
@@ -46,6 +47,7 @@
                 <el-popconfirm
                   title="真的要删除当前用户吗?"
                   @confirm="handleConfirm(scope.row.id)"
+                  v-if="isCanDelete"
                 >
                   <template #reference>
                     <el-button :icon="Delete" type="danger" link
@@ -88,7 +90,7 @@ import { formatUTCToLocalTime } from '@/utils/format'
 import { useSystemStore } from '@/store/main/system'
 import { storeToRefs } from 'pinia'
 import { EditPen, Delete } from '@element-plus/icons-vue'
-
+import { localCache } from '@/utils/cache'
 interface IContent {
   config: {
     name: string
@@ -100,9 +102,24 @@ interface IContent {
     childrenProps?: any
   }
 }
-
 const props = defineProps<IContent>()
 const emit = defineEmits(['on-create', 'on-editor'])
+
+const permission = localCache.getCache('permission')
+console.log(permission)
+// const isCanQuery = permission.find(
+//   (item: any) => item === `system:${props.config.name}:query`
+// )
+const isCanUpdate = permission.find(
+  (item: any) => item === `system:${props.config.name}:update`
+)
+const isCanDelete = permission.find(
+  (item: any) => item === `system:${props.config.name}:delete`
+)
+const isCanCreate = permission.find(
+  (item: any) => item === `system:${props.config.name}:create`
+)
+
 const systemStore = useSystemStore()
 // 分页数据
 const currentPage = ref(1)

@@ -2,27 +2,7 @@
   <div class="dashboard">
     <el-row :gutter="20">
       <el-col :span="6" v-for="(item, index) in amountList" :key="index">
-        <div class="container">
-          <div class="header">
-            <span>{{ item.title }}</span>
-            <el-tooltip :content="item.tips" placement="top" effect="light">
-              <el-icon><Warning /></el-icon>
-            </el-tooltip>
-          </div>
-          <div class="content">
-            <span>{{
-              (item.amount === 'saleroom' ? '￥' : '') +
-              formatCount(item.number1)
-            }}</span>
-          </div>
-          <div class="footer">
-            商品总销量&nbsp;
-            <span>{{
-              (item.amount === 'saleroom' ? '￥' : '') +
-              formatCount(item.number2)
-            }}</span>
-          </div>
-        </div>
+        <cardCount v-bind="item" />
       </el-col>
     </el-row>
 
@@ -32,7 +12,11 @@
           <pie-chart :pieData="categoryList" />
         </chartCard>
       </el-col>
-      <el-col :span="10"><div class="grid-content ep-bg-purple" /></el-col>
+      <el-col :span="10">
+        <chartCard header="不同城市商品销量">
+          <mapEcharts :mapData="cityGoodsSale" />
+        </chartCard>
+      </el-col>
       <el-col :span="7">
         <chart-card header="分类商品数量(玫瑰图)">
           <rose-chart :roseData="saleRankData" />
@@ -64,17 +48,19 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useAnalysisStore } from '@/store/main/analysis'
-import { formatCount } from '@/utils/format'
 import chartCard from '@/components/chart-card/chart-card.vue'
-import PieChart from '@/components/pie-chart/pie-chart.vue'
-import roseChart from '@/components/rose-chart/rose-chart.vue'
-import lineChart from '@/components/line-chart/line-chart.vue'
+import PieChart from '@/components/page-echarts/cpns/pie-chart.vue'
+import roseChart from '@/components/page-echarts/cpns/rose-chart.vue'
+import lineChart from '@/components/page-echarts/cpns/line-chart.vue'
+import mapEcharts from '@/components/page-echarts/cpns/map-echarts.vue'
+import cardCount from '@/components/card-count/card-count.vue'
 const analysisStore = useAnalysisStore()
 analysisStore.getGoodsAmountList()
 analysisStore.getGoodsCategoryCount()
 analysisStore.getGoodsSaleRank()
 analysisStore.getGoodsCategorySale()
 analysisStore.getGoodsCategoryFavor()
+analysisStore.getCityGoodsSale()
 const amountList = computed(() => analysisStore.amountList)
 
 const categoryList = computed(() => {
@@ -99,29 +85,14 @@ const categoryFavor = computed(() => {
   const values = analysisStore.categoryFavorData.map((item) => item.goodsFavor)
   return { labels, values }
 })
+
+const cityGoodsSale = computed(() => {
+  return analysisStore.cityGoodsSale.map((item) => {
+    return { name: item.address, value: item.count }
+  })
+})
 </script>
 <style scoped lang="less">
-.container {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #fff;
-  padding: 0 20px;
-  height: 130px;
-  overflow: hidden;
-  text-align: left;
-}
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  height: 36px;
-  color: rgba(0, 0, 0, 0.45);
-  font-size: 14px;
-  .el-icon {
-    cursor: pointer;
-  }
-}
 .content {
   display: flex;
   color: rgba(0, 0, 0, 0.85);

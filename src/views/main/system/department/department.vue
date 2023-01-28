@@ -39,7 +39,6 @@ const modalConfigRef = computed(() => {
   }
   return modalConfig
 })
-mainStore.getEntireData()
 
 const { contentRef, handleListData, handleResetForm } = usePageContent()
 const { ModalRef, handleCreate, handleEditor } = usePageModal()

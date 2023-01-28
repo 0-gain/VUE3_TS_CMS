@@ -60,7 +60,6 @@ const handleCreate = () => {
 }
 // 编辑数据
 const handleEditor = (data: any) => {
-  console.log(data)
   pageModalRef?.value?.show(data, true)
 }
 </script>

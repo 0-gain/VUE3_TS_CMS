@@ -20,13 +20,11 @@
 
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
-import { useRouter } from 'vue-router'
 import { useLoginStore } from '@/store/login'
 import type { FormInstance } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { localCache } from '@/utils/cache'
 const store = useLoginStore()
-const router = useRouter()
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
   account: localCache.getCache('name') ?? '',
@@ -57,7 +55,6 @@ const loginAction = (flag: boolean) => {
     if (valid) {
       const { account, password } = ruleForm
       store.getUserLogin(account, password).then(() => {
-        router.push('/main')
         // 记住密码
         localCache.setCache('name', account)
         if (flag) {

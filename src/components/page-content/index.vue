@@ -106,7 +106,6 @@ const props = defineProps<IContent>()
 const emit = defineEmits(['on-create', 'on-editor'])
 
 const permission = localCache.getCache('permission')
-console.log(permission)
 // const isCanQuery = permission.find(
 //   (item: any) => item === `system:${props.config.name}:query`
 // )

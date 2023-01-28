@@ -53,7 +53,6 @@ import type { ElTree } from 'element-plus'
 // 菜单展示
 const mainStore = useMainStore()
 const { entireMenu } = storeToRefs(mainStore)
-mainStore.getEntireData()
 const otherInfo = ref()
 const handleMenuCheckChange = (data1: any, data2: any) => {
   const menuList = [...data2.checkedKeys, ...data2.halfCheckedKeys]

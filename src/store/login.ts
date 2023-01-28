@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import { reqUserLogin, reqRoleMenu, reqUserInfo } from '@/service/login'
 import { localCache } from '@/utils/cache'
 import { menuToRoute, mapMenuPermission } from '@/utils/map-menu'
-
+import { useMainStore } from './main/index'
+import router from '@/router'
 interface ILoginState {
   token: string
   roleMenu: any[]
@@ -44,14 +45,18 @@ export const useLoginStore = defineStore('login', {
       const res = await reqRoleMenu(id)
       // 本地存储
       localCache.setCache(ROLE_MENU, res.data)
-      console.log(res.data)
       this.roleMenu = res.data
 
-      // 通过菜单注册路由
-      menuToRoute(res.data)
+      // 权限信息
       const permission = mapMenuPermission(this.roleMenu)
       this.permission = permission
       localCache.setCache(USER_PERMISSION, permission)
+
+      // 通过菜单注册路由
+      menuToRoute(this.roleMenu)
+
+      // 跳转页面
+      router.push('/main')
     },
     // 读取本地缓存
     loadLocalDataAction() {
@@ -59,9 +64,12 @@ export const useLoginStore = defineStore('login', {
       this.roleMenu = localCache.getCache(ROLE_MENU) ?? []
       this.userInfo = localCache.getCache(USER_INFO) ?? {}
       this.permission = localCache.getCache(USER_PERMISSION) ?? []
-      if (this.token) {
+      if (this.token && this.roleMenu) {
         // 通过菜单注册路由
         menuToRoute(this.roleMenu)
+        // 获取数据
+        const mainStore = useMainStore()
+        mainStore.getEntireData()
       }
     }
   }
